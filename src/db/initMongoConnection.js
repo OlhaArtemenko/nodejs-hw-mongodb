@@ -18,4 +18,6 @@ async function initMongoConnection() {
   }
 }
 
-module.exports = initMongoConnection;
+module.exports = {
+  initMongoConnection,
+};
