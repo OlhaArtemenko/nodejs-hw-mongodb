@@ -1,29 +1,44 @@
 import express from 'express';
+import pino from 'pino-http';
 import cors from 'cors';
-import pino from 'pino';
-import pinoHttp from 'pino-http';
-import dotenv from 'dotenv';
-import contactsRouter from './routes/contacts.mjs';
+import { env } from './utils/env.js';
+import router from './routers/contacts.js';
+import pinoPretty from 'pino-pretty';
 
-dotenv.config();
+const PORT = Number(env('PORT', '3030'));
 
-const app = express();
-const logger = pino();
-const port = process.env.PORT || 3030;
+export const setupServer = () => {
+  const app = express();
 
-app.use(cors());
-app.use(pinoHttp({ logger }));
+  app.use(express.json());
+  app.use(cors());
+  app.use(
+    pino({
+      transport: {
+        target: 'pino-pretty',
+        options: {
+          translateTime: true,
+        },
+      },
+    }),
+  );
 
-app.use(express.json());
+  app.use('/contacts', router);
 
-app.use('/contacts', contactsRouter);
-
-app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' });
-});
-
-export function setupServer() {
-  app.listen(port, () => {
-    logger.info(`Server is running on port ${port}`);
+  app.use('*', (req, res, next) => {
+    res.status(404).json({
+      message: 'Not found',
+    });
   });
-}
+
+  app.use((err, req, res, next) => {
+    res.status(500).json({
+      message: 'Something went wrong',
+      error: err.message,
+    });
+  });
+
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+};

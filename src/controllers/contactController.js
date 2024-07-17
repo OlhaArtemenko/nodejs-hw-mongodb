@@ -1,33 +1,38 @@
-import Contacts from '../models/contacts.js';
+import {
+  getAllContactsService,
+  getContactByIdService,
+} from '../services/contacts.js';
 
-export const getContacts = async (req, res, next) => {
+export const getAllContacts = async (req, res, next) => {
   try {
-    const contacts = await Contacts.find();
+    const contacts = await getAllContactsService();
     res.status(200).json({
       status: 200,
       message: 'Successfully found contacts!',
       data: contacts,
     });
   } catch (error) {
-    console.error('Error fetching contacts:', error);
-    res.status(500).json({ message: 'Error fetching contacts' });
+    console.log(error);
+    throw error;
   }
 };
-
 export const getContactById = async (req, res, next) => {
   const { contactId } = req.params;
   try {
-    const contact = await Contacts.findById(contactId);
+    const contact = await getContactByIdService(contactId);
     if (!contact) {
-      return res.status(404).json({ message: 'Contact not found' });
+      res.status(404).json({
+        message: 'Contact not found',
+      });
+      return;
     }
     res.status(200).json({
       status: 200,
-      message: `Successfully found contact with id ${contactId}!`,
+      message: 'Successfully found contact!',
       data: contact,
     });
   } catch (error) {
-    console.error('Error fetching contact:', error);
-    res.status(500).json({ message: 'Error fetching contact' });
+    console.log(error);
+    throw error;
   }
 };
