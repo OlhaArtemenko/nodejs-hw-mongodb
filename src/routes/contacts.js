@@ -1,12 +1,12 @@
-const express = require('express');
-const {
+import express from 'express';
+import {
   getContacts,
   getContactById,
-} = require('../controllers/contactController');
+} from '../controllers/contactController.js';
 
 const router = express.Router();
 
-router.get('/contacts', getContacts);
-router.get('/contacts/:contactId', getContactById);
+router.get('/', getContacts); // Змінив маршрут на '/'
+router.get('/:contactId', getContactById);
 
-module.exports = router;
+export default router;

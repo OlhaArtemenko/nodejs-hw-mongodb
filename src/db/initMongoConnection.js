@@ -1,5 +1,7 @@
-const mongoose = require('mongoose');
-require('dotenv').config();
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 async function initMongoConnection() {
   const { MONGODB_USER, MONGODB_PASSWORD, MONGODB_URL, MONGODB_DB } =
@@ -18,6 +20,4 @@ async function initMongoConnection() {
   }
 }
 
-module.exports = {
-  initMongoConnection,
-};
+export { initMongoConnection };
