@@ -6,7 +6,7 @@ import {
 
 const router = express.Router();
 
-router.get('/', getContacts); // Змінив маршрут на '/'
+router.get('/contacts', getContacts);
 router.get('/:contactId', getContactById);
 
 export default router;
