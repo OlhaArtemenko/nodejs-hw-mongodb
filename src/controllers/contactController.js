@@ -3,7 +3,7 @@ import {
   getContactByIdService,
 } from '../services/contacts.js';
 
-export const getAllContacts = async (req, res, next) => {
+export const getAllContacts = async (req, res) => {
   try {
     const contacts = await getAllContactsService();
     res.status(200).json({
@@ -12,11 +12,15 @@ export const getAllContacts = async (req, res, next) => {
       data: contacts,
     });
   } catch (error) {
-    console.log(error);
-    throw error;
+    console.error('Error in getAllContacts:', error);
+    res.status(500).json({
+      message: 'Failed to fetch contacts',
+      error: error.message,
+    });
   }
 };
-export const getContactById = async (req, res, next) => {
+
+export const getContactById = async (req, res) => {
   const { contactId } = req.params;
   try {
     const contact = await getContactByIdService(contactId);
@@ -32,7 +36,10 @@ export const getContactById = async (req, res, next) => {
       data: contact,
     });
   } catch (error) {
-    console.log(error);
-    throw error;
+    console.error('Error in getContactById:', error);
+    res.status(500).json({
+      message: 'Failed to fetch contact',
+      error: error.message,
+    });
   }
 };
