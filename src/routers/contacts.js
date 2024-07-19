@@ -6,8 +6,8 @@ import {
 
 const router = Router();
 
-router.get('/', getAllContacts);
+router.get('/contacts', getAllContacts);
 
-router.get('/:contactId', getContactById);
+router.get('/contacts/:contactId', getContactById);
 
 export default router;
